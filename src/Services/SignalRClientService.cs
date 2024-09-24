@@ -38,7 +38,7 @@ namespace ServiceHubClient.Services
             // Define a handler for when the connection is closed
             connection.Closed += async (error) =>
             {
-                Console.WriteLine("Connection closed. Trying to reconnect...");
+                _logger.LogInformation("Connection closed. Trying to reconnect...");
                 await Task.Delay(_signalRSetting.DelayBeforeReconnect);
                 await connection.StartAsync();
             };
