@@ -60,18 +60,22 @@ namespace ServiceHubClient.Services
                 };
 
                 // Handle any messages from the server (this matches the method in the hub)
-                connection.On<string>("Execute", async (message) =>
+                connection.On<string, string>("Execute", async (actionType, script) =>
                 {
-                    _logger.LogInformation($"Received message: {message}");
+                    _logger.LogInformation($"Received message: {script}");
 
-                    if (message == "synchronize")
+                    if (actionType == "synchronize")
                     {
                         await _localAgentService.Synchronize();
                     }
 
-                    if (message == "export")
+                    if (actionType == "export")
                     {
                         await _localAgentService.Export();
+                    }
+                    if (actionType == "message")
+                    {
+                        await _localAgentService.SendMessage(script);
                     }
                 });
 

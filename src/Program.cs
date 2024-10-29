@@ -17,5 +17,6 @@ builder.Services.Configure<SignalRSetting>(builder.Configuration.GetSection(name
 builder.Services.Configure<LocalAgentSetting>(builder.Configuration.GetSection(nameof(LocalAgentSetting)));
 builder.Services.AddHostedService<Worker>();
 
+
 var host = builder.Build();
 host.Run();
