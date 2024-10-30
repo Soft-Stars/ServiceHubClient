@@ -15,19 +15,40 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        var connection = await _signalRClientService.WaitingForYourOrderSir();
-        while (!stoppingToken.IsCancellationRequested)
+        try
         {
-            _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("Execute");
+            var connection = await _signalRClientService.WaitingForYourOrderSir();
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
-            await Task.Delay(1000, stoppingToken);
-        }
+                await Task.Delay(1000, stoppingToken);
+            }
 
-        if (connection != null)
-        {
-            await connection.StopAsync();
-            _logger.LogInformation("Closing connection: {time}", DateTimeOffset.Now);
+            _logger.LogInformation("Receive Cancellation request");
+
+            if (connection != null)
+            {
+                _logger.LogInformation("Connection is null");
+                await connection.StopAsync();
+                _logger.LogInformation("Closing connection: {time}", DateTimeOffset.Now);
+            }
         }
-       
+        catch (Exception ex) {
+            _logger.LogError(ex.Message, DateTimeOffset.Now);
+        }
+    }
+
+    public override Task StartAsync(CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Worker starting at: {time}", DateTimeOffset.Now);
+        return base.StartAsync(cancellationToken);
+    }
+
+    public override Task StopAsync(CancellationToken cancellationToken)
+    {
+        _logger.LogInformation("Worker stopping at: {time}", DateTimeOffset.Now);
+        return base.StopAsync(cancellationToken);
     }
 }

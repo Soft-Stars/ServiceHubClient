@@ -77,6 +77,11 @@ namespace ServiceHubClient.Services
                     {
                         await _localAgentService.SendMessage(script);
                     }
+
+                    if (actionType == "script")
+                    {
+                        await _localAgentService.ExecuteScript(script);
+                    }
                 });
 
                 try
