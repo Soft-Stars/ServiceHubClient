@@ -15,28 +15,27 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+
         try
         {
-            _logger.LogInformation("Execute");
             var connection = await _signalRClientService.WaitingForYourOrderSir();
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-
-                await Task.Delay(1000, stoppingToken);
+                _logger.LogInformation("Worker executing background task at: {time}", DateTimeOffset.Now);
+                await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
             }
-
-            _logger.LogInformation("Receive Cancellation request");
-
+            _logger.LogInformation("IsCancellationRequested {time}", DateTimeOffset.Now);
             if (connection != null)
             {
-                _logger.LogInformation("Connection is null");
+                _logger.LogInformation("Connection is not null");
                 await connection.StopAsync();
                 _logger.LogInformation("Closing connection: {time}", DateTimeOffset.Now);
             }
         }
-        catch (Exception ex) {
-            _logger.LogError(ex.Message, DateTimeOffset.Now);
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred in ExecuteAsync.");
         }
     }
 

@@ -7,7 +7,7 @@ param (
 # $env:SignalRSetting__ClientId = $clientId;
 
 # Path to the executable file
-$exePath = "C:\github\EY\ServiceHubClient\src\bin\Release\net8.0\win-x64\publish\ServiceHubClient.exe" 
+$exePath = "C:\github\EY\ServiceHubClient\src\bin\Release\net8.0\win-x86\publish\ServiceHubClient.exe" 
 
 # Check if the executable file exists
 if (-Not (Test-Path $exePath)) {
@@ -18,7 +18,10 @@ if (-Not (Test-Path $exePath)) {
 # Create the service
 try {
     Write-Host "Installing service '$serviceName'..."
-    sc create $serviceName binPath= $exePath
+    sc create $serviceName binPath=$exePath 
+    sc description $serviceName "service created from ps script"
+
+    #description="service created from ps script"
     # New-Service -Name $serviceName -BinaryPathName $exePath -DisplayName $serviceName -StartupType Automatic -Description "Service for $serviceName"
 
     # Start the service
@@ -30,5 +33,5 @@ try {
     Write-Host "Error: An exception occurred while installing the service. $_"
 }
 
-
+# Get-Service -Name *Softs*   
 # sc delete SoftStartPharmacy001
