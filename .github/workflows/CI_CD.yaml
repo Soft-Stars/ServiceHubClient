@@ -22,9 +22,11 @@ jobs:
         dotnet-version: '7.x' # Adjust according to your .NET version
 
     - name: Restore dependencies
+      working-directory: src
       run: dotnet restore
 
-    - name: Build and Publish
+    - name: Build and 
+      working-directory: src
       run: dotnet publish -r win-x86 -c Release /p:PublishSingleFile=true /p:SelfContained=true /p:PublishTrimmed=false -o ./output
 
     - name: Upload artifact
