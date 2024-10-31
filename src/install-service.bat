@@ -2,16 +2,13 @@
 setlocal
 
 :: Set the service name
-set "serviceName=Pharmacy001"
+set "serviceName=SoftStarsPharmacy003"
 
 :: Set the path to appsettings.json and the executable
 set "jsonFile=appsettings.json"
 set "batFolder=%~dp0"
 set "exePath=%batFolder%ServiceHubClient.exe"
-
-:: Update ClientId in appsettings.json using PowerShell
-powershell -Command "((Get-Content -path '%jsonFile%' -Raw | ConvertFrom-Json).SignalRSetting.ClientId = '%serviceName%') | ConvertTo-Json -Depth 32 | Set-Content -Path '%jsonFile%'"
-
+setx MY_ENV_VAR "%serviceName%" /M
 :: Create the service
 sc create "%serviceName%" binPath= "\"%exePath%\""
 
