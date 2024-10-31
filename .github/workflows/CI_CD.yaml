@@ -25,7 +25,7 @@ jobs:
       working-directory: src
       run: dotnet restore
 
-    - name: Build and 
+    - name: Build and Publish
       working-directory: src
       run: dotnet publish -r win-x86 -c Release /p:PublishSingleFile=true /p:SelfContained=true /p:PublishTrimmed=false -o ./output
 
@@ -33,4 +33,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: ConsoleAppExecutable
-        path: ./output
+        path: ./src/output
